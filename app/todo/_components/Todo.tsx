@@ -40,9 +40,6 @@ function Todo(props: PropsType) {
     setNewName(event.target.value);
   }
 
-  // NOTE: As written, this function has a bug: it doesn't prevent the user
-  // from submitting an empty form. This is left as an exercise for developers
-  // working through MDN's React tutorial.
   function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     if (isEmpty) return;
@@ -53,67 +50,75 @@ function Todo(props: PropsType) {
   }
 
   const editingTemplate = (
-    <form className="stack-small" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label className="todo-label" htmlFor={props.id}>
+    <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+      <div className="flex flex-col">
+        <label className="text-xl" htmlFor={props.id}>
           New name for {props.name}
         </label>
         <input
           id={props.id}
-          className={`todo-text ${isEmpty && "alert"}`}
+          className={`border-2 border-neutral-600 px-2 py-1 text-xl ${isEmpty && "border-red-600"}`}
           type="text"
           value={newName}
           onChange={handleChange}
           ref={editFieldRef}
         />
       </div>
-      <div className="btn-group">
+      <div className="flex items-center gap-3">
         <button
           type="button"
-          className="btn todo-cancel"
+          className="flex-1 border-2 border-neutral-600 py-1 text-xl"
           onClick={() => setEditing(false)}
         >
           Cancel
-          <span className="visually-hidden">renaming {props.name}</span>
+          <span className="hidden">renaming {props.name}</span>
         </button>
-        <button type="submit" className="btn btn__primary todo-edit">
+        <button
+          type="submit"
+          className="flex-1 border-2 border-black bg-black py-1 text-xl text-white"
+        >
           Save
-          <span className="visually-hidden">new name for {props.name}</span>
+          <span className="hidden">new name for {props.name}</span>
         </button>
       </div>
     </form>
   );
 
   const viewTemplate = (
-    <div className="stack-small">
-      <div className="c-cb">
+    <div className="flex flex-col gap-3 ">
+      <div className="relative flex items-center gap-3">
         <input
+          className="peer h-11 w-11 cursor-pointer appearance-none border-2 border-neutral-600 bg-transparent "
           id={props.id}
           type="checkbox"
           defaultChecked={props.completed}
           onChange={() => props.toggleTaskCompleted(props.id)}
         />
-        <label className="todo-label" htmlFor={props.id}>
+        {/* Custom Checkbox using input with `appearance-none` and label with `after:` */}
+        <label
+          className="cursor-pointer text-lg after:absolute after:left-3 after:top-3 after:box-content after:h-2 after:w-4 after:-rotate-45 after:cursor-pointer after:border-4 after:border-e-0 after:border-t-0 after:border-solid after:border-neutral-600 after:opacity-0 peer-checked:after:opacity-100 "
+          htmlFor={props.id}
+        >
           {props.name}
         </label>
       </div>
-      <div className="btn-group">
+      <div className="flex gap-3">
         <button
           type="button"
-          className="btn"
+          className="flex-1 border-2 border-neutral-600 py-1 text-xl"
           onClick={() => {
             setEditing(true);
           }}
           ref={editButtonRef}
         >
-          Edit <span className="visually-hidden">{props.name}</span>
+          Edit <span className="hidden">{props.name}</span>
         </button>
         <button
           type="button"
-          className="btn btn__danger"
+          className="flex-1 border bg-red-600 py-1 text-xl text-white"
           onClick={() => props.deleteTask(props.id)}
         >
-          Delete <span className="visually-hidden">{props.name}</span>
+          Delete <span className="hidden">{props.name}</span>
         </button>
       </div>
     </div>

@@ -28,23 +28,23 @@ function Form(props: PropsType) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2 className="label-wrapper">
-        <label htmlFor="new-todo-input" className="label__lg">
-          What needs to be done?
-        </label>
-      </h2>
-
+    <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+      <label htmlFor="new-todo-input" className="block text-center">
+        What needs to be done?
+      </label>
       <input
         type="text"
         id="new-todo-input"
-        className={`input input__lg ${isEmpty && "alert"}`}
+        className={`border-2 border-black p-4 ${isEmpty && "alert"}`}
         name="text"
         autoComplete="off"
         value={name}
         onChange={handleChange}
       />
-      <button type="submit" className="btn btn__primary btn__lg">
+      <button
+        type="submit"
+        className="cursor-pointer border border-black bg-black py-2 capitalize text-white"
+      >
         Add
       </button>
     </form>

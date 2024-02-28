@@ -106,21 +106,30 @@ function App() {
   }, [tasks.length, prevTaskLength]);
 
   return (
-    <div className="todoapp stack-large">
-      <h1>TodoMatic</h1>
-      <Form addTask={addTask} />
-      <div className="filters btn-group stack-exception">{filterList}</div>
-      <h2 id="list-heading" tabIndex={-1} ref={listHeadingRef}>
-        {headingText}
-      </h2>
-      <ul
-        aria-labelledby="list-heading"
-        className="todo-list stack-large stack-exception"
-        role="list"
-      >
-        {taskList}
-      </ul>
-    </div>
+    <main className="mx-auto max-w-3xl">
+      <div className="relative mb-16 mt-8 bg-white p-10 shadow-md">
+        <h1 className="max-w-full text-center text-4xl font-bold">TodoMatic</h1>
+        <Form addTask={addTask} />
+        <div className="mx-10 mt-5 flex justify-between gap-2">
+          {filterList}
+        </div>
+        <h2
+          className="mx-10 mt-5 text-3xl font-bold"
+          id="list-heading"
+          tabIndex={-1}
+          ref={listHeadingRef}
+        >
+          {headingText}
+        </h2>
+        <ul
+          aria-labelledby="list-heading"
+          className="mx-10 mt-2 flex flex-col gap-4"
+          role="list"
+        >
+          {taskList}
+        </ul>
+      </div>
+    </main>
   );
 }
 
