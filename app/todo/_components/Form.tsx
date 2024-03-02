@@ -28,7 +28,7 @@ function Form(props: PropsType) {
   }
 
   return (
-    <form className="mt-6 flex flex-col gap-4" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-4 mt-6" onSubmit={handleSubmit}>
       <label htmlFor="new-todo-input" className="block text-center">
         What needs to be done?
       </label>
@@ -43,7 +43,7 @@ function Form(props: PropsType) {
       />
       <button
         type="submit"
-        className="cursor-pointer border border-black bg-black py-2 capitalize text-white"
+        className="py-2 text-white capitalize bg-black border border-black cursor-pointer"
       >
         Add
       </button>

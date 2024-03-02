@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import Form from "./_components/Form";
 import FilterButton from "./_components/FilterButton";
 import Todo from "./_components/Todo";
+import { getTasks } from "./_actions";
 import { nanoid } from "nanoid";
-import DATA from "./_data/data.json";
 
 type TaskType = {
   id: string;
@@ -31,7 +31,7 @@ export type FilterType = keyof typeof FILTER_MAP;
 const FILTER_NAMES = Object.keys(FILTER_MAP) as Array<FilterType>;
 
 function App() {
-  const [tasks, setTasks] = useState(DATA);
+  const [tasks, setTasks] = useState<TaskType[]>(getTasks());
   const [filter, setFilter] = useState<FilterType>("All");
 
   function toggleTaskCompleted(id: string) {
@@ -106,11 +106,11 @@ function App() {
   }, [tasks.length, prevTaskLength]);
 
   return (
-    <main className="mx-auto max-w-3xl">
-      <div className="relative mb-16 mt-8 bg-white p-10 shadow-md">
-        <h1 className="max-w-full text-center text-4xl font-bold">TodoMatic</h1>
+    <main className="max-w-3xl mx-auto">
+      <div className="relative p-10 mt-8 mb-16 bg-white shadow-md">
+        <h1 className="max-w-full text-4xl font-bold text-center">TodoMatic</h1>
         <Form addTask={addTask} />
-        <div className="mx-10 mt-5 flex justify-between gap-2">
+        <div className="flex justify-between gap-2 mx-10 mt-5">
           {filterList}
         </div>
         <h2
@@ -123,7 +123,7 @@ function App() {
         </h2>
         <ul
           aria-labelledby="list-heading"
-          className="mx-10 mt-2 flex flex-col gap-4"
+          className="flex flex-col gap-4 mx-10 mt-2"
           role="list"
         >
           {taskList}
