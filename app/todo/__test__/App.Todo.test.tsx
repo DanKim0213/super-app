@@ -31,7 +31,7 @@ describe("Todo Integration test", () => {
 
     const $checkboxes = screen.getAllByRole("checkbox");
 
-    expect($checkboxes).toHaveLength(2);
+    expect($checkboxes).toHaveLength(tasks.length);
   });
 
   it("makes an active task completed", async () => {

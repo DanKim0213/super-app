@@ -1,8 +1,8 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import Form from "./_components/Form";
-import FilterButton from "./_components/FilterButton";
 import Todo from "./_components/Todo";
+import Filter from "./_components/Filter";
 import { getTasks } from "./_actions";
 import { nanoid } from "nanoid";
 
@@ -65,9 +65,22 @@ function App() {
     setTasks(editedTaskList);
   }
 
-  const taskList = tasks
-    ?.filter(FILTER_MAP[filter])
-    .map((task) => (
+  const taskList = (() => {
+    let result;
+    if (filter === "All") {
+      const active = [];
+      const completed = [];
+      for (const task of tasks) {
+        if (task.completed === true) completed.push(task);
+        else active.push(task);
+      }
+
+      result = active.concat(completed);
+    } else {
+      result = tasks?.filter(FILTER_MAP[filter]);
+    }
+
+    return result.map((task) => (
       <Todo
         id={task.id}
         name={task.name}
@@ -78,15 +91,7 @@ function App() {
         editTask={editTask}
       />
     ));
-
-  const filterList = FILTER_NAMES.map((name) => (
-    <FilterButton
-      key={name}
-      name={name}
-      isPressed={name === filter}
-      setFilter={setFilter}
-    />
-  ));
+  })();
 
   function addTask(name: string) {
     const newTask = { id: "todo-" + nanoid(), name: name, completed: false };
@@ -110,9 +115,11 @@ function App() {
       <div className="relative p-10 mt-8 mb-16 bg-white shadow-md">
         <h1 className="max-w-full text-4xl font-bold text-center">TodoMatic</h1>
         <Form addTask={addTask} />
-        <div className="flex justify-between gap-2 mx-10 mt-5">
-          {filterList}
-        </div>
+        <Filter
+          FILTER_NAMES={FILTER_NAMES}
+          filter={filter}
+          setFilter={setFilter}
+        />
         <h2
           className="mx-10 mt-5 text-3xl font-bold"
           id="list-heading"

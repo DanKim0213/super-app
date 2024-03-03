@@ -103,7 +103,9 @@ function Todo(props: PropsType) {
         />
         {/* Custom Checkbox using input with `appearance-none` and label with `after:` */}
         <label
-          className="text-lg cursor-pointer after:absolute after:left-3 after:top-3 after:box-content after:h-2 after:w-4 after:-rotate-45 after:cursor-pointer after:border-4 after:border-e-0 after:border-t-0 after:border-solid after:border-neutral-600 after:opacity-0 peer-checked:after:opacity-100 "
+          className={`text-lg cursor-pointer after:absolute after:left-3 after:top-3 after:box-content after:h-2 after:w-4 after:-rotate-45 after:cursor-pointer after:border-4 after:border-e-0 after:border-t-0 after:border-solid after:border-neutral-600 after:opacity-0 peer-checked:after:opacity-100 ${
+            props.completed && "line-through"
+          } `}
           htmlFor={props.id}
         >
           {props.name}
