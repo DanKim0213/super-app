@@ -1,18 +1,20 @@
 "use client";
 import { useState } from "react";
-import * as asset from "../../public/starbucks";
 import Image from "next/image";
 import { OrderItem, Item } from "./type";
+import { getItems } from "./_actions";
 import Menu from "./_components/Menu";
 import Order from "./_components/Order";
 
-type App = {
-  items: Item[];
+const logo = {
+  name: "logo",
+  src: "/starbucks/logo.png",
 };
 
-function CafeApp({ items = asset.items }: App) {
+function CafeApp() {
   const [selectedItems, setSelectedItems] = useState<OrderItem[]>([]);
   const [toggleForMenu, setToggleForMenu] = useState(false);
+  const items: Item[] = getItems();
 
   const handleOrder = (newItems: OrderItem[]) => {
     setSelectedItems((prev) => {
@@ -54,12 +56,7 @@ function CafeApp({ items = asset.items }: App) {
   return (
     <>
       <header className="flex items-center gap-8 p-4 bg-gray-200">
-        <Image
-          width={60}
-          height={60}
-          src={asset.logo.src}
-          alt={asset.logo.name}
-        />
+        <Image width={60} height={60} src={logo.src} alt={logo.name} />
         MENU
       </header>
       <main className="flex justify-between">

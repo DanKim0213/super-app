@@ -4,14 +4,34 @@ import "@testing-library/jest-dom";
 
 import CafeApp from "../page";
 import Slider from "../_components/Slider";
-import * as asset from "../../../public/starbucks";
+import { getItems } from "../_actions";
 
-const items = [asset.items[0], asset.items[5]];
+jest.mock("../_actions");
+
+const mockGetItems = jest.mocked(getItems);
+const items = [
+  {
+    id: "id1",
+    src: "/starbucks/item1.jpg",
+    name: "카페라떼",
+    price: 4600,
+  },
+  {
+    id: "id6",
+    src: "/starbucks/item5.jpg",
+    name: "아메리카노",
+    price: 4600,
+  },
+];
 
 describe("키오스크 테스트", () => {
+  beforeEach(() => {
+    mockGetItems.mockReturnValue(items);
+  });
+
   it("모든 상품은 초기에 수량이 0이다", async () => {
     expect.assertions(items.length);
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $selects = screen.getAllByRole("option", { selected: true });
 
@@ -20,7 +40,7 @@ describe("키오스크 테스트", () => {
 
   it("메뉴 고르고 취소하기", async () => {
     expect.assertions(items.length);
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $item = screen.getByLabelText(/아메리카노/);
     await userEvent.selectOptions($item, "2");
@@ -32,7 +52,7 @@ describe("키오스크 테스트", () => {
   });
 
   it("상품 수량 선택 후 '주문 추가' 클릭 시 주문 내역에 상품 정보가 추가", async () => {
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $item = screen.getByLabelText(/아메리카노/);
     await userEvent.selectOptions($item, "2");
@@ -49,7 +69,7 @@ describe("키오스크 테스트", () => {
   });
 
   it("메뉴 고르고 추가한 다음에 취소하기", async () => {
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $item = screen.getByLabelText(/아메리카노/);
     await userEvent.selectOptions($item, "2");
@@ -63,7 +83,7 @@ describe("키오스크 테스트", () => {
   });
 
   it("삭제 시 선택한 상품이 주문내역에서 제외", async () => {
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $item = screen.getByLabelText(/아메리카노/);
     await userEvent.selectOptions($item, "2");
@@ -78,7 +98,7 @@ describe("키오스크 테스트", () => {
 
   it("주문하기 클릭 시 주문 완료 안내 후 모두 초기화", async () => {
     window.alert = jest.fn();
-    render(<CafeApp items={items} />);
+    render(<CafeApp />);
 
     const $item = screen.getByLabelText(/아메리카노/);
     await userEvent.selectOptions($item, "1");
@@ -101,45 +121,43 @@ describe("키오스크 테스트", () => {
 
 describe("슬라이더 테스트", () => {
   it("슬라이더 렌더링", async () => {
-    render(<Slider items={asset.items} />);
+    render(<Slider items={items} />);
 
-    const $image = screen.getByTestId(asset.items[0].id);
+    const $image = screen.getByTestId(items[0].id);
 
     expect($image).toBeInTheDocument();
   });
 
   it("다음 버튼 이동", async () => {
-    render(<Slider items={asset.items} />);
+    render(<Slider items={items} />);
 
-    const $image = screen.getByTestId(asset.items[0].id);
+    const $image = screen.getByTestId(items[0].id);
     expect($image).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: ">" }));
-    const $nextImage = screen.getByTestId(asset.items[1].id);
+    const $nextImage = screen.getByTestId(items[1].id);
 
     expect($nextImage).toBeInTheDocument();
   });
 
   it("이전 버튼 이동", async () => {
-    render(<Slider items={asset.items} />);
+    render(<Slider items={items} />);
 
-    const $image = screen.getByTestId(asset.items[0].id);
+    const $image = screen.getByTestId(items[0].id);
     expect($image).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "<" }));
-    const $nextImage = screen.getByTestId(
-      asset.items[asset.items.length - 1].id
-    );
+    const $nextImage = screen.getByTestId(items[items.length - 1].id);
 
     expect($nextImage).toBeInTheDocument();
   });
 
   it("3초 간격으로 자동 슬라이드", async () => {
     jest.useFakeTimers();
-    render(<Slider items={asset.items} />);
+    render(<Slider items={items} />);
 
-    const $image = screen.getByTestId(asset.items[0].id);
+    const $image = screen.getByTestId(items[0].id);
     expect($image).toBeInTheDocument();
     act(() => jest.advanceTimersByTime(3000));
-    const $nextImage = screen.getByTestId(asset.items[1].id);
+    const $nextImage = screen.getByTestId(items[1].id);
 
     expect($nextImage).toBeInTheDocument();
   });
